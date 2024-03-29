@@ -3,7 +3,6 @@ let todos = document.querySelector('.todos');
 let input = document.querySelector('input');
 
 let add = document.querySelector('.add');
-
 add.addEventListener( 'click', (event) => {
     event.preventDefault();
     let count = localStorage.length;
@@ -35,11 +34,20 @@ for(let i = 0; i < localStorage.length; i++) {
     span.innerText = localStorage.getItem(i);
     li.appendChild(span);
 
+    let complete = document.createElement('button');
+    complete.innerHTML = '<i class="fas fa-check-circle"></li>';
+    complete.classList.add('complete-btn');
+    complete.classList.add('uncomplete');
+    complete.style.background = 'rgb(255, 200, 0)';
+    complete.style.margin = '7px';
+    li.appendChild(complete);
+
     
     let trash = document.createElement('button');
     trash.innerHTML = '<i class="fas fa-trash"></li>';
     trash.classList.add('trash-btn');
     trash.style.background = 'rgb(255, 200, 0)';
+    trash.style.margin = '7px';
     li.appendChild(trash);
 
     
@@ -47,6 +55,7 @@ for(let i = 0; i < localStorage.length; i++) {
     edit.innerHTML = '<i class="fas fa-edit"></li>';
     edit.classList.add('edit-btn');
     edit.style.background = 'rgb(255, 200, 0)';
+    edit.style.margin = '7px';
     li.appendChild(edit);
 
 
@@ -56,9 +65,26 @@ for(let i = 0; i < localStorage.length; i++) {
 }
 
 
+let complete = document.querySelectorAll('.complete-btn');
 let edit = document.querySelectorAll('.edit-btn');
 let trash = document.querySelectorAll('.trash-btn');
 
+complete.forEach( (btn) => {
+    btn.addEventListener('click', () => {
+
+        let li = btn.parentElement;
+
+        if(btn.classList.contains('uncomplete')) {
+            btn.classList.remove('uncomplete');
+            btn.classList.add('complete');
+            li.style.textDecoration = "line-through";
+        } else {
+            btn.classList.remove('complete');
+            btn.classList.add('uncomplete');
+            li.style.textDecoration = "None";
+        }
+    });
+});
 
 
 
@@ -118,13 +144,13 @@ trash.forEach( (btn) => {
 });
 
 
-
-
 let clear = document.querySelector('.clear-btn');
 
 clear.addEventListener('click', () => {
-    localStorage.clear();
-    location.reload();
+
+    let prompt = window.confirm("Are you sure you want to clear all todos?");
+    if(prompt == true) {
+        localStorage.clear();
+        location.reload();
+    }
 });
-
-
